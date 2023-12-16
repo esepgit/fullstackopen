@@ -4,7 +4,16 @@ import { useState } from 'react'
 const Button = (props) => <button onClick={props.click}>{props.text}</button>
 
 //Component StatisticLine
-const StatisticLine = (props) => <p>{props.text} {props.value}</p>  
+const StatisticLine = (props) => {
+  return (
+    <>
+      <tr>
+        <td>{props.text}</td> 
+        <td>{props.value}</td>
+      </tr>
+    </> 
+  )
+}  
 
 //Component Statistics
 const Statistics = (props) => {
@@ -17,12 +26,17 @@ const Statistics = (props) => {
   } else {
     return (
       <div>
-          <StatisticLine text={"good"} value={props.good} />
-          <StatisticLine text={"neutral"} value={props.neutral} />
-          <StatisticLine text={"bad"} value={props.bad} />
-          <StatisticLine text={"all"} value={props.good + props.neutral + props.bad} />
-          <StatisticLine text={"average"} value={(props.good - props.bad) / (props.good + props.neutral + props.bad)} />
-          <StatisticLine text={"positive"} value={props.good / (props.good + props.neutral + props.bad) + "%"} />
+        <table>
+          <tbody>
+            <StatisticLine text={"good"} value={props.good} />
+            <StatisticLine text={"neutral"} value={props.neutral} />
+            <StatisticLine text={"bad"} value={props.bad} />
+            <StatisticLine text={"all"} value={props.good + props.neutral + props.bad} />
+            <StatisticLine text={"average"} value={(props.good - props.bad) / (props.good + props.neutral + props.bad)} />
+            <StatisticLine text={"positive"} value={(props.good * 100) / (props.good + props.neutral + props.bad) + "%"} />
+          </tbody>
+        </table>
+          
       </div>
     )
   } 
