@@ -8,17 +8,26 @@ const Total = (props) => <p>{props.text} {props.value}</p>
 
 //Component Statistics
 const Statistics = (props) => {
-  return (
-    <div>
+  if(props.good == 0 && props.neutral == 0 && props.bad == 0) {
+    return (
+      <div>
         <Title text={"statistics"} />
-        <Total text={"good"} value={props.good} />
-        <Total text={"neutral"} value={props.neutral} />
-        <Total text={"bad"} value={props.bad} />
-        <Total text={"all"} value={props.good + props.neutral + props.bad} />
-        <Total text={"average"} value={(props.good - props.bad) / (props.good + props.neutral + props.bad)} />
-        <Total text={"positive"} value={props.good / (props.good + props.neutral + props.bad) + "%"} />
-    </div>
-  )
+        <p>No feedback given</p>
+      </div>  
+    )
+  } else {
+    return (
+      <div>
+          <Title text={"statistics"} />
+          <Total text={"good"} value={props.good} />
+          <Total text={"neutral"} value={props.neutral} />
+          <Total text={"bad"} value={props.bad} />
+          <Total text={"all"} value={props.good + props.neutral + props.bad} />
+          <Total text={"average"} value={(props.good - props.bad) / (props.good + props.neutral + props.bad)} />
+          <Total text={"positive"} value={props.good / (props.good + props.neutral + props.bad) + "%"} />
+      </div>
+    )
+  } 
 }
 
 //Component App
