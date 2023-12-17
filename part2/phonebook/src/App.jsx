@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 //Filter component
 const Filter = (props) => {
@@ -27,22 +28,29 @@ const PersonForm = (props) => {
 }
 
 //Persons component
-const Persons = (props) => props.filter.map(element => <p key={element.name}>{element.name} {element.number}</p>)
+const Persons = (props) => props.filter.map(element => {
+  return (<p key={element.name}>{element.name} {element.number}</p>)
+})
 
 //App component
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ]);
-  /*filter es inicializado con los mismos valores de persons 
-  para que inicialmente se muestren todos los nombres */
-  const [ filter, setFilter ] = useState(persons);
+  const [ persons, setPersons ] = useState([]);
+  const [ filter, setFilter ] = useState([]);
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
   const [ newFilter, setNewFilter] = useState('');
+
+  //Call to DB. axios + Effect Hook
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+        /*filter es inicializado con los mismos valores de persons 
+        para que inicialmente se muestren todos los nombres */
+        setFilter(response.data)
+      })
+  }, [])
 
   const handleNameChange = (event) => setNewName(event.target.value);
   const handleNumberChange = (event) => setNewNumber(event.target.value);
