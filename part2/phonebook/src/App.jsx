@@ -78,7 +78,19 @@ const App = () => {
         .catch(error => console.log(error))
       
     } else {
-        alert(`${newName} is already added to phonebook`)
+      //Update number
+        if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+          const person = persons.find(element => element.name === newName)
+          const id = person.id
+          const newObject = {...person, number: newNumber}
+          personsService
+            .updateNumber(id, newObject)
+            .then(updated => {
+              setPersons(persons.map(element => element.id !== id ? element : updated))
+              setFilter(filter.map(element => element.id !== id ? element : updated))
+            })
+            .catch(error => console.log(error))
+        }
     }
     setNewName('');
     setNewNumber('');

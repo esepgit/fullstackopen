@@ -1,11 +1,6 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
       "name": "Ada Lovelace",
       "number": "39-44-5323523",
       "id": 2
@@ -19,6 +14,16 @@
       "name": "Mary Poppins",
       "number": "2342-3242",
       "id": 4
+    },
+    {
+      "name": "Juan Rodriguez",
+      "number": "1111",
+      "id": 5
+    },
+    {
+      "name": "Piripao Lucas",
+      "number": "3333",
+      "id": 6
     }
   ]
 }
