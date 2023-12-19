@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import personsService from './services/persons'
 
 //Filter component
 const Filter = (props) => {
@@ -42,14 +43,15 @@ const App = () => {
 
   //Call to DB. axios + Effect Hook
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    personsService
+      .getAll()
+      .then(initialData => {
+        setPersons(initialData)
         /*filter es inicializado con los mismos valores de persons 
         para que inicialmente se muestren todos los nombres */
-        setFilter(response.data)
+        setFilter(initialData)
       })
+      .catch(error => console.log(error))
   }, [])
 
   const handleNameChange = (event) => setNewName(event.target.value);
@@ -65,9 +67,16 @@ const App = () => {
 
     if(persons.every(element => element.name != newName)) {
       const personObject = { name: newName, number: newNumber };
-      setPersons(persons.concat(personObject));
-      //agrego el nuevo valor a filter para que se muestre en pantalla el nuevo nombre
-      setFilter(persons.concat(personObject))
+
+      personsService
+        .create(personObject)
+        .then(newPerson => {
+          setPersons(persons.concat(newPerson));
+          //agrego el nuevo valor a filter para que se muestre en pantalla el nuevo nombre
+          setFilter(persons.concat(newPerson))
+        })
+        .catch(error => console.log(error))
+      
     } else {
         alert(`${newName} is already added to phonebook`)
     }
