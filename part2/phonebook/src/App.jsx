@@ -30,7 +30,7 @@ const PersonForm = (props) => {
 
 //Persons component
 const Persons = (props) => props.filter.map(element => {
-  return (<p key={element.name}>{element.name} {element.number}</p>)
+  return (<p key={element.name}>{element.name} {element.number} <button onClick={() => props.handleDeletePerson(element.id, element.name)}>delete</button></p>)
 })
 
 //App component
@@ -84,6 +84,22 @@ const App = () => {
     setNewNumber('');
   }
 
+  //Delete person
+  const handleDeletePerson = (id, name) => {
+
+    if(window.confirm(`Delete ${name} ?`)) {
+      personsService
+      .deletePerson(id)
+      .then(response => {
+        console.log(response);
+      setPersons(persons.filter(element => element.id !== id ))
+      setFilter(persons.filter(element => element.id !== id))  
+      })
+      .catch(error => console.log(error))
+    }
+    
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -91,7 +107,7 @@ const App = () => {
       <h3>add a new</h3>
       <PersonForm onsubmit={addPerson} valuename={newName} onchangename={handleNameChange} valuenumber={newNumber} onchangenumber={handleNumberChange} />
       <h3>Numbers</h3>
-      <Persons filter={filter} />
+      <Persons filter={filter} handleDeletePerson={handleDeletePerson} />
     </div>
   )
 }
