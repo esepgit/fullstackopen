@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import personsService from './services/persons'
+import Notification from './components/Notification'
 
 //Filter component
 const Filter = (props) => {
@@ -39,7 +40,8 @@ const App = () => {
   const [ filter, setFilter ] = useState([]);
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
-  const [ newFilter, setNewFilter] = useState('');
+  const [ newFilter, setNewFilter ] = useState('');
+  const [ actionMessage, setActionMessage ] = useState(null)
 
   //Call to DB. axios + Effect Hook
   useEffect(() => {
@@ -71,6 +73,10 @@ const App = () => {
       personsService
         .create(personObject)
         .then(newPerson => {
+          setActionMessage(`${newPerson.name} was added succesfully`)
+          setTimeout(() => {
+            setActionMessage(null)
+          }, 5000);
           setPersons(persons.concat(newPerson));
           //agrego el nuevo valor a filter para que se muestre en pantalla el nuevo nombre
           setFilter(persons.concat(newPerson))
@@ -86,6 +92,10 @@ const App = () => {
           personsService
             .updateNumber(id, newObject)
             .then(updated => {
+              setActionMessage(`${person.name}'s number updated`)
+              setTimeout(() => {
+                setActionMessage(null)
+              }, 5000);
               setPersons(persons.map(element => element.id !== id ? element : updated))
               setFilter(filter.map(element => element.id !== id ? element : updated))
             })
@@ -115,6 +125,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={actionMessage} />
       <Filter value={newFilter} onchange={handleFilterChange} />
       <h3>add a new</h3>
       <PersonForm onsubmit={addPerson} valuename={newName} onchangename={handleNameChange} valuenumber={newNumber} onchangenumber={handleNumberChange} />

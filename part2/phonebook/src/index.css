@@ -1,0 +1,11 @@
+.notification {
+    display: flex;
+    align-items: center;
+    background: snow;
+    border: 3px solid green;
+    color: green;
+    height: 30px;
+    margin-bottom: 20px;
+    font-size: 22px;
+    justify-content: center;
+}
