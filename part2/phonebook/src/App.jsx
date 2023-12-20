@@ -42,6 +42,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('');
   const [ newFilter, setNewFilter ] = useState('');
   const [ actionMessage, setActionMessage ] = useState(null)
+  const [ className, setClassName ] = useState('notification-success')
 
   //Call to DB. axios + Effect Hook
   useEffect(() => {
@@ -73,6 +74,7 @@ const App = () => {
       personsService
         .create(personObject)
         .then(newPerson => {
+          setClassName('notification-success')
           setActionMessage(`${newPerson.name} was added succesfully`)
           setTimeout(() => {
             setActionMessage(null)
@@ -92,6 +94,7 @@ const App = () => {
           personsService
             .updateNumber(id, newObject)
             .then(updated => {
+              setClassName('notification-success')
               setActionMessage(`${person.name}'s number updated`)
               setTimeout(() => {
                 setActionMessage(null)
@@ -99,7 +102,15 @@ const App = () => {
               setPersons(persons.map(element => element.id !== id ? element : updated))
               setFilter(filter.map(element => element.id !== id ? element : updated))
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+              setClassName('notification-error')
+              setActionMessage(`Information of ${person.name} has already removed from server`)
+              setTimeout(() => {
+                setActionMessage(null)
+              }, 5000);
+              setPersons(persons.filter(element => element.id !== id ))
+              setFilter(persons.filter(element => element.id !== id)) 
+            })
         }
     }
     setNewName('');
@@ -113,11 +124,18 @@ const App = () => {
       personsService
       .deletePerson(id)
       .then(response => {
-        console.log(response);
-      setPersons(persons.filter(element => element.id !== id ))
-      setFilter(persons.filter(element => element.id !== id))  
+        setPersons(persons.filter(element => element.id !== id ))
+        setFilter(persons.filter(element => element.id !== id))  
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        setClassName('notification-error')
+        setActionMessage(`Information of ${name} has already removed from server`)
+        setTimeout(() => {
+          setActionMessage(null)
+        }, 5000);
+        setPersons(persons.filter(element => element.id !== id ))
+        setFilter(persons.filter(element => element.id !== id)) 
+      })  
     }
     
   }
@@ -125,7 +143,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={actionMessage} />
+      <Notification message={actionMessage} classname={className} />
       <Filter value={newFilter} onchange={handleFilterChange} />
       <h3>add a new</h3>
       <PersonForm onsubmit={addPerson} valuename={newName} onchangename={handleNameChange} valuenumber={newNumber} onchangenumber={handleNumberChange} />
