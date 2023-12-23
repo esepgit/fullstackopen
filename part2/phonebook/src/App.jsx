@@ -83,7 +83,14 @@ const App = () => {
           //agrego el nuevo valor a filter para que se muestre en pantalla el nuevo nombre
           setFilter(persons.concat(newPerson))
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+          setClassName('notification-error')
+          setActionMessage(error.response.data)
+          setTimeout(() => {
+            setActionMessage(null)
+          }, 5000)
+          console.log(error);
+        })
       
     } else {
       //Update number
@@ -104,12 +111,14 @@ const App = () => {
             })
             .catch(error => {
               setClassName('notification-error')
-              setActionMessage(`Information of ${person.name} has already removed from server`)
+              setActionMessage(error.response.data)
               setTimeout(() => {
                 setActionMessage(null)
               }, 5000);
-              setPersons(persons.filter(element => element.id !== id ))
-              setFilter(persons.filter(element => element.id !== id)) 
+              if(error.response.data === 'error: name does not exist in the database') {
+                setPersons(persons.filter(element => element.id !== id ))
+                setFilter(persons.filter(element => element.id !== id)) 
+              }  
             })
         }
     }
@@ -129,7 +138,7 @@ const App = () => {
       })
       .catch(error => {
         setClassName('notification-error')
-        setActionMessage(`Information of ${name} has already removed from server`)
+        setActionMessage(error.response.data)
         setTimeout(() => {
           setActionMessage(null)
         }, 5000);
